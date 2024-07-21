@@ -12,11 +12,36 @@ import icon from '../public/icon.png';
 import pro1 from '../public/pro1.png';
 import F1 from '../public/F1.png';
 import F2 from '../public/F2.png';
-import F4 from '../public/F4.png';
+import emailjs from 'emailjs-com';
 
 export default function Home() {
   const [darkMode, setDarkMode] = useState(false);
+  const [formData, setFormData] = useState({ name: '', email: '', subject: '', message: '' });
+  
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+  };
 
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    
+    const templateParams = {
+      from_name: formData.name,
+      from_email: formData.email,
+      subject: formData.subject,
+      message: formData.message,
+    };
+  
+    try {
+      await emailjs.send('service_b1t0rrb', 'template_yadsh0e', templateParams, 'qIglSiKAeBByemKdu');
+      alert('Message sent successfully!');
+      setFormData({ name: '', email: '', subject: '', message: '' });
+    } catch (error) {
+      console.error('Error sending email:', error);
+      alert('Failed to send message. Please try again later.');
+    }
+  };
   return (
     <div className={darkMode ? 'dark' : ''}>
       <Head>
@@ -26,8 +51,18 @@ export default function Home() {
       </Head>
       <main className="px-10 bg-white md:px-20 lg:px-40 dark:bg-gray-900">
         <section className="min-h-screen">
-          <nav className="flex justify-between py-10 mb-12 dark:text-white">
+          <nav className="sticky top-0 z-50 flex justify-between py-6 mb-12 bg-white dark:bg-gray-900 dark:text-white">
             <h1 className="text-xl font-burtons">developedbyns</h1>
+            
+            {/* Navigation Links */}
+            <ul className="flex items-center max-w-lg space-x-4 md:text-xl">
+              <li><a href="#about" className="text-teal-700">About Me</a></li>
+              <li><a href="#education" className="text-teal-700">Education</a></li>
+              <li><a href="#projects" className="text-teal-700">Projects</a></li>
+              <li><a href="#designs" className="text-teal-700">Designs</a></li>
+              <li><a href="#contact" className="text-teal-700">Contact</a></li>
+            </ul>
+
             <ul className="flex items-center">
               <li>
                 <BsFillMoonStarsFill
@@ -37,8 +72,8 @@ export default function Home() {
               </li>
               <li>
                 <a
-                  className="px-4 py-3 ml-8 text-white rounded-md bg-gradient-to-r from-cyan-500 to-teal-500"
-                  href="/path/to/your-cv.pdf" 
+                  className="px-4 py-3 ml-8 text-white rounded-md bg-gradient-to-r from-cyan-700 to-teal-700"
+                  href="/resume.pdf" 
                   download
                 >
                   Resume
@@ -46,6 +81,7 @@ export default function Home() {
               </li>
             </ul>
           </nav>
+
           <div className="p-10 text-center">
             <h2 className="py-2 text-5xl font-medium text-teal-600 md:text-6xl dark:text-teal-400">
               Nipuni S Ranathunga
@@ -56,43 +92,30 @@ export default function Home() {
               <br /> University of Moratuwa.
             </p>
           </div>
+          
+          {/* Social Links */}
           <div className="flex justify-center gap-16 py-3 text-5xl text-gray-600 dark:text-gray-400">
-            <a
-              href="https://www.linkedin.com/in/nipuni-s-ranathunga/"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
+            <a href="https://www.linkedin.com/in/nipuni-s-ranathunga/" target="_blank" rel="noopener noreferrer">
               <AiFillLinkedin />
             </a>
-            <a
-              href="https://github.com/nipunisr"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
+            <a href="https://github.com/nipunisr" target="_blank" rel="noopener noreferrer">
               <AiFillGithub />
             </a>
-            <a
-              href="https://medium.com/@sathsaranipuni11"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
+            <a href="https://medium.com/@sathsaranipuni11" target="_blank" rel="noopener noreferrer">
               <AiFillMediumCircle />
             </a>
-            <a
-              href="https://www.behance.net/nipunisranat"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
+            <a href="https://www.behance.net/nipunisranat" target="_blank" rel="noopener noreferrer">
               <AiFillBehanceCircle />
             </a>
           </div>
+
           <div className="relative w-32 h-32 mx-auto mt-20 overflow-hidden rounded-full bg-gradient-to-b from-teal-500 md:h-64 md:w-64">
             <Image src={ns} layout="fill" objectFit="cover" />
           </div>
-        </section>
+        
 
         {/* About Me Section */}
-        <section className='flex items-center justify-center my-20'>
+        <section id="about" className='flex items-center justify-center my-20'>
           <div className='text-center'>
             <h3 className="py-1 pb-4 text-3xl text-teal-600 dark:text-teal-400">About Me</h3>
             <p className="py-2 leading-8 text-gray-800 text-md md:text-xl dark:text-gray-200">
@@ -104,8 +127,8 @@ export default function Home() {
           </div>
         </section>
 
-        {/* Education and Experience Section */}
-        <section className='my-20'>
+        {/* Education Section */}
+        <section id="education" className='my-20'>
           <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
             <div>
               <h3 className="py-1 text-3xl text-teal-600 dark:text-teal-400">Education</h3>
@@ -123,14 +146,14 @@ export default function Home() {
                       <div className="w-2 h-2 mr-2 bg-teal-500 rounded-full"></div>
                       <h4 className="text-lg font-semibold text-gray-800 dark:text-gray-200">G.C.E. Advance Level-2020</h4>
                     </div>
-                    <p className="text-gray-600 dark:text-gray-400">R/Sivali Central College , Ratnapura<br />Stream : Commerce<br />Z Score: 1.8755</p>
+                    <p className="text-gray-600 dark:text-gray-400">R/Sivali Central College, Ratnapura<br />Stream: Commerce<br />Z Score: 1.8755</p>
                   </div>
                   <div className="mb-8 ml-4">
                     <div className="flex items-center mb-1">
                       <div className="w-2 h-2 mr-2 bg-teal-500 rounded-full"></div>
                       <h4 className="text-lg font-semibold text-gray-800 dark:text-gray-200">G.C.E. Ordinary Level-2017</h4>
                     </div>
-                    <p className="text-gray-600 dark:text-gray-400">R/Gamini Central College , Kalawana<br /> 9 A's including ICT, Commerce & Music</p>
+                    <p className="text-gray-600 dark:text-gray-400">R/Gamini Central College, Kalawana<br />9 A's including ICT, Commerce & Music</p>
                   </div>
                 </div>
               </div>
@@ -166,7 +189,8 @@ export default function Home() {
           </div>
         </section>
 
-        <section className='flex items-center justify-center my-10'>
+        {/* Projects Section */}
+        <section id="projects" className='flex items-center justify-center my-10'>
           <div className='text-center'>
             <h3 className="py-1 text-3xl text-teal-600 dark:text-teal-400">Projects</h3>
             <p className="py-2 leading-8 text-gray-800 text-md md:text-xl dark:text-gray-200">
@@ -206,9 +230,10 @@ export default function Home() {
           </div>
         </section>
 
-        <section className='flex items-center justify-center my-10'>
+        {/* Designs Section */}
+        <section id="designs" className='flex items-center justify-center my-10'>
           <div className='text-center'>
-            <h3 className="py-1 text-3xl text-teal-600 dark:text-teal-400">Designs</h3>
+            <h3 className="py-1 text-3xl text-teal-600 dark:text-teal-400">My Designs</h3>
             <p className="py-2 leading-8 text-gray-800 text-md md:text-xl dark:text-gray-200">
               My passion for design has led me to create numerous projects, each one challenging me to push the boundaries of creativity and functionality.
             </p>
@@ -238,44 +263,81 @@ export default function Home() {
           </div>
         </section>
 
-        {/* Footer Section */}
-        <footer className="py-10 text-center text-white bg-gray-800">
-          <p className="mb-4">Nipuni S Ranathunga</p>
-          <div className="flex justify-center gap-6 text-2xl">
-            <a
-              href="https://www.linkedin.com/in/nipuni-s-ranathunga/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="hover:text-teal-500"
-            >
-              <AiFillLinkedin />
-            </a>
-            <a
-              href="https://github.com/nipunisr"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="hover:text-teal-500"
-            >
-              <AiFillGithub />
-            </a>
-            <a
-              href="https://medium.com/@sathsaranipuni11"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="hover:text-teal-500"
-            >
-              <AiFillMediumCircle />
-            </a>
-            <a
-              href="https://www.behance.net/nipunisranat"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="hover:text-teal-500"
-            >
-              <AiFillBehanceCircle />
-            </a>
+        
+        {/* Contact Me Section */}
+        <section id="contact" className='my-20'>
+  <div className="flex flex-col items-center justify-center px-10">
+    {/* Contact Form */}
+    <div className='w-full mb-10 text-center md:w-1/2'>
+      <h3 className="py-1 text-3xl text-teal-600 dark:text-teal-400">Contact Me</h3>
+      <form onSubmit={handleSubmit} className="flex flex-col">
+        <input
+          type="text"
+          name="name"
+          value={formData.name}
+          onChange={handleChange}
+          placeholder="Name"
+          className="p-2 mb-4 border border-gray-300 rounded"
+        />
+        <input
+          type="email"
+          name="email"
+          value={formData.email}
+          onChange={handleChange}
+          placeholder="Email"
+          className="p-2 mb-4 border border-gray-300 rounded"
+        />
+        <input
+          type="text"
+          name="subject"
+          value={formData.subject}
+          onChange={handleChange}
+          placeholder="Subject"
+          className="p-2 mb-4 border border-gray-300 rounded"
+        />
+        <textarea
+          name="message"
+          value={formData.message}
+          onChange={handleChange}
+          placeholder="Message"
+          className="p-2 mb-4 border border-gray-300 rounded"
+        />
+        <button
+          type="submit"
+          className="px-4 py-2 text-white bg-teal-500 rounded hover:bg-teal-600"
+        >
+          Send
+        </button>
+      </form>
+    </div>
+
+    {/* Contact Information */}
+    <div className='w-full text-center md:w-1/2'>
+      <p className="text-gray-800 dark:text-gray-200">
+        <strong>Email:</strong> sathsaranipuni11@gmail.com
+      </p>
+      <p className="text-gray-800 dark:text-gray-200">
+        <strong>Address:</strong> Katubedda, Moratuwa
+      </p>
+    </div>
+  </div>
+</section>
+
+
+        {/* Footer */}
+        <footer className="py-6 text-center text-gray-600 bg-white dark:bg-gray-900 dark:text-gray-400">
+          <div className="container mx-auto">
+            <p>&copy; 2024 Nipuni S Ranathunga. All rights reserved.</p>
+            <p>
+              Follow me on{' '}
+              <a href="https://www.linkedin.com/in/nipuni-s-ranathunga/" className="text-teal-600 hover:text-teal-400">LinkedIn</a>,{' '}
+              <a href="https://github.com/nipunisr" className="text-teal-600 hover:text-teal-400">GitHub</a>,{' '}
+              <a href="https://medium.com/@sathsaranipuni11" className="text-teal-600 hover:text-teal-400">Medium</a>,{' '}
+              <a href="https://www.behance.net/nipunisranat" className="text-teal-600 hover:text-teal-400">Behance</a>
+            </p>
           </div>
         </footer>
+        </section>
       </main>
     </div>
   );
